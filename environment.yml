@@ -4,30 +4,14 @@ channels:
   - conda-forge
   - intel
 dependencies:
+channels:
+  - defaults
+  - conda-forge
+dependencies:
   - python=3.9
   - flask
   - requests
-  - bottleneck
-  - brotli
-  - certifi
-  - charset-normalizer
-  - click
-  - idna
-  - itsdangerous
-  - jinja2
-  - markupsafe
-  #- mkl-fft
-  #- mkl-random
-  #- mkl-service
-  - numexpr
   - numpy
   - pandas
-  - pysocks
-  - python-dateutil
-  - pytz
-  - setuptools
-  - six
-  - tzdata
-  - urllib3
-  - werkzeug
   - pip
+
