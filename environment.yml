@@ -1,0 +1,33 @@
+name: strava_app
+channels:
+  - defaults
+  - conda-forge
+  - intel
+dependencies:
+  - python=3.9
+  - flask
+  - requests
+  - bottleneck
+  - brotli
+  - certifi
+  - charset-normalizer
+  - click
+  - idna
+  - itsdangerous
+  - jinja2
+  - markupsafe
+  #- mkl-fft
+  #- mkl-random
+  #- mkl-service
+  - numexpr
+  - numpy
+  - pandas
+  - pysocks
+  - python-dateutil
+  - pytz
+  - setuptools
+  - six
+  - tzdata
+  - urllib3
+  - werkzeug
+  - pip
