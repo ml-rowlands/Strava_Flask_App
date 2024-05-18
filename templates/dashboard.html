@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Strava Activity Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Your Strava Activities</h1>
+        <p>Goal: {{ goal_value }} {{ unit }}</p>
+        <p>Total {{ goal_type }}: {{ total }} {{ unit }}</p>
+        <p>Expected Progress: {{ expected_progress }} {{ unit }}</p>
+        <canvas id="progressChart"></canvas>
+    </div>
+
+    <script>
+        const today = new Date();
+        const startOfYear = new Date(today.getFullYear(), 0, 1);
+        const endOfYear = new Date(today.getFullYear(), 11, 31);
+        const totalWeeks = Math.ceil((endOfYear - startOfYear) / (1000 * 60 * 60 * 24 * 7));
+        const weeklyGoalValue = {{ goal_value }} / totalWeeks;
+
+        // Calculate cumulative expected progress
+        let expectedData = [];
+        let cumulativeExpected = 0;
+        for (let i = 0; i < totalWeeks; i++) {
+            cumulativeExpected += weeklyGoalValue;
+            expectedData.push(cumulativeExpected);
+        }
+
+        // Actual progress data from Flask
+        const actualData = {{ cumulative_actual | tojson }};
+        
+        // Ensure the actual data array is the same length as expected data
+        if (actualData.length > totalWeeks) {
+            actualData.length = totalWeeks;
+        } else {
+            while (actualData.length < totalWeeks) {
+                actualData.push(null);  // Fill missing weeks with null
+            }
+        }
+
+        const labels = [];
+        for (let i = 0; i < totalWeeks; i++) {
+            const weekDate = new Date(startOfYear);
+            weekDate.setDate(startOfYear.getDate() + i * 7);
+            labels.push(weekDate.toISOString().split('T')[0]);
+        }
+
+        console.log('Actual Data:', actualData);
+        console.log('Expected Data:', expectedData);
+        console.log('Labels:', labels);
+
+        const ctx = document.getElementById('progressChart').getContext('2d');
+        const chart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: 'Expected Progress',
+                        data: expectedData,
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        borderWidth: 2,
+                        borderDash: [5, 5],
+                        fill: false
+                    },
+                    {
+                        label: 'Actual Progress',
+                        data: actualData,
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 2,
+                        fill: false
+                    }
+                ]
+            },
+            options: {
+                scales: {
+                    x: {
+                        type: 'time',
+                        time: {
+                            unit: 'week'
+                        }
+                    },
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
+
+
+

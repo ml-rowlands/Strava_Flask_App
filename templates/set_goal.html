@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Set Your Goal</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <script>
+        function updateUnits() {
+            const goalType = document.getElementById('goal_type').value;
+            const unitSelect = document.getElementById('unit');
+            unitSelect.innerHTML = '';
+
+            if (goalType === 'elevation') {
+                unitSelect.innerHTML = `
+                    <option value="meters">Meters</option>
+                    <option value="feet">Feet</option>
+                `;
+            } else if (goalType === 'distance') {
+                unitSelect.innerHTML = `
+                    <option value="kilometers">Kilometers</option>
+                    <option value="miles">Miles</option>
+                `;
+            } else if (goalType === 'time') {
+                unitSelect.innerHTML = `
+                    <option value="hours">Hours</option>
+                    <option value="days">Days</option>
+                `;
+            }
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>Set Your Goal</h1>
+        <form method="POST">
+            <label for="goal_type">Goal Type:</label>
+            <select id="goal_type" name="goal_type" onchange="updateUnits()">
+                <option value="elevation">Elevation Gain</option>
+                <option value="distance">Distance</option>
+                <option value="time">Time</option>
+            </select>
+            <br>
+            <label for="goal_value">Goal Value:</label>
+            <input type="number" id="goal_value" name="goal_value" step="any" required>
+            <br>
+            <label for="unit">Unit:</label>
+            <select id="unit" name="unit">
+                <!-- Units will be dynamically populated based on goal type -->
+            </select>
+            <br>
+            <label for="activity_type">Activity Type:</label>
+            <select id="activity_type" name="activity_type" multiple>
+                <option value="all">All</option>
+                <option value="Run">Run</option>
+                <option value="Ride">Ride</option>
+                <option value="Hike">Hike</option>
+                <option value="Swim">Swim</option>
+            </select>
+            <br>
+            <button type="submit" class="btn btn-primary">Set Goal</button>
+        </form>
+    </div>
+    <script>
+        // Initialize the units based on the default goal type
+        updateUnits();
+    </script>
+</body>
+</html>
+
