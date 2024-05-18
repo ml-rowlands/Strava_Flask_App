@@ -4,10 +4,6 @@ channels:
   - conda-forge
   - intel
 dependencies:
-channels:
-  - defaults
-  - conda-forge
-dependencies:
   - python=3.9
   - flask
   - requests
